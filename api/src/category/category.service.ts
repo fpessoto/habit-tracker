@@ -8,15 +8,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createCategory(
     createCategoryDto: CreateCategoryDto,
+    userId
   ): Promise<Category> {
     const { name } = createCategoryDto;
     return this.prisma.category.create({
       data: {
         name,
+        userId
       },
     });
   }
@@ -38,7 +40,13 @@ export class CategoryService {
     });
   }
 
-  async getCategories(): Promise<Category[]> {
-    return this.prisma.category.findMany();
+  async getCategories(userId: string): Promise<Category[]> {
+    const categories = this.prisma.category.findMany({
+      where: { userId },
+    });
+
+    console.log('response', { categories, userId });
+
+    return categories;
   }
 }

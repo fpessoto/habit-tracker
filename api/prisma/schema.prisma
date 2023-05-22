@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  habits    Habit[]
+  id         String     @id @default(uuid())
+  username   String     @unique
+  email      String     @unique
+  password   String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  habits     Habit[]
+  categories Category[]
 }
 
 model Habit {
@@ -49,6 +50,8 @@ model Category {
   habits    Habit[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  userId    String
+  User      User    @relation(fields: [userId], references: [id])
 }
 
 enum Frequency {

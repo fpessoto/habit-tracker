@@ -12,14 +12,17 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { User } from 'src/auth/decorators/user.decorator';
 
+@ApiBearerAuth()
 @Controller('api/categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @Post()
-  async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.createCategory(createCategoryDto);
+  async createCategory(@Body() createCategoryDto: CreateCategoryDto, @User() user) {
+    return this.categoryService.createCategory(createCategoryDto, user.id);
   }
 
   @Put(':category_id')
@@ -36,7 +39,9 @@ export class CategoryController {
   }
 
   @Get()
-  async getCategories() {
-    return this.categoryService.getCategories();
+  async getCategories(@User() user) {
+    console.log('get category', user);
+
+    return this.categoryService.getCategories(user.id);
   }
 }
