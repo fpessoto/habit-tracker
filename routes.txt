@@ -1,0 +1,18 @@
+[] POST     /api/user -> create a new user
+
+[] POST     /api/auth/token -> get auth token for an user
+[] POST     /api/auth/logout -> logout for for an user
+
+
+[] POST    /api/categories -> create a category
+[] PUT     /api/categories/{category_id} -> update a category
+[] DELETE  /api/categories/{category_id} -> delete a category
+[] GET     /api/categories -> list of categories from a user
+
+[] POST    /api/habits -> create an habit
+[] PUT     /api/habits/{habit_id} -> update a habit
+[] DELETE  /api/habits/{habit_id} -> delete a category
+[] GET     /api/habits -> get a list of habits for the user
+[] GET     /api/habits/{habit_id} -> GET details of a habit
+[] POST    /api/habits/{habit_id}/log -> log a habit entry
+[] GET     /api/habits/{habit_id}/log -> get the list log a habit
