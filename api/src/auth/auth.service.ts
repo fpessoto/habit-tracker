@@ -1,15 +1,18 @@
 // AuthService.ts
 
-import { Injectable } from '@nestjs/common';
-import { PrismaClient, User } from '@prisma/client';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthTokenDto } from './dto/auth-token.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
 
 const SECRET_KEY = 'your-secret-key'; // Replace with your own secret key
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly usersService: UserService,
+  ) {}
 
   async getAuthToken(authTokenDto: AuthTokenDto): Promise<string> {
     const { username, password } = authTokenDto;
@@ -19,5 +22,17 @@ export class AuthService {
     // }
     // const token = jwt.sign({ userId: user.id }, SECRET_KEY);
     return '';
+  }
+
+  async signIn(username, pass) {
+    const user = await this.usersService.findOne(username);
+
+    if (user?.password !== pass) {
+      throw new UnauthorizedException();
+    }
+    const payload = { sub: user.id, username: user.username };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

@@ -1,20 +1,30 @@
-// AuthController.ts
-
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { AuthTokenDto } from './dto/auth-token.dto';
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  @Post('token')
-  async getAuthToken(@Body() authTokenDto: AuthTokenDto) {
-    return this.authService.getAuthToken(authTokenDto);
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  signIn(@Body() signInDto: AuthTokenDto) {
+    return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
-  @Post('logout')
-  async logout() {
-    // Logic for user logout
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

@@ -1,7 +1,7 @@
 // UserService.ts
 
 import { Injectable } from '@nestjs/common';
-import { PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -17,6 +17,12 @@ export class UserService {
         email,
         password,
       },
+    });
+  }
+
+  async findOne(username: string): Promise<User | undefined> {
+    return await this.prisma.user.findFirst({
+      where: { AND: { username: username } },
     });
   }
 }
