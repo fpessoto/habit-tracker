@@ -13,10 +13,11 @@ import { HabitsService } from './habits.service';
 import { CreateHabitDto } from './dto/create-habit.dto';
 import { UpdateHabitDto } from './dto/update-habit.dto';
 import { LogHabitDto } from './dto/log-habit.dto';
+import { User } from 'src/auth/decorators/user.decorator';
 
 @Controller('api/habits')
 export class HabitsController {
-  constructor(private readonly habitService: HabitsService) {}
+  constructor(private readonly habitService: HabitsService) { }
 
   @Post()
   async createHabit(@Body() createHabitDto: CreateHabitDto) {
@@ -37,8 +38,8 @@ export class HabitsController {
   }
 
   @Get()
-  async getHabits() {
-    return this.habitService.getHabits();
+  async getHabits(@User() user) {
+    return this.habitService.getHabitsbyUserId(user.id);
   }
 
   @Get(':habit_id')
@@ -57,5 +58,12 @@ export class HabitsController {
   @Get(':habit_id/log')
   async getHabitLogs(@Param('habit_id') habitId: string) {
     return this.habitService.getHabitLogs(habitId);
+  }
+
+  @Delete('/log/:log_id')
+  async unlogHabit(
+    @Param('log_id') logId: string,
+  ) {
+    return this.habitService.unlogHabit(logId);
   }
 }

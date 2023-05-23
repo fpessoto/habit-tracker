@@ -15,4 +15,31 @@ describe('CategoryService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('create: ', () => {
+    it.todo('should create with success');
+    it.todo(
+      'should return businessException when category name already exists',
+    );
+  });
+
+  describe('update: ', () => {
+    it.todo('should update with success');
+    it.todo(
+      'should return businessException when category name already exists',
+    );
+  });
+
+  describe('delete: ', () => {
+    it.todo('should delete with success');
+    it.todo(
+      'should return businessException when category has existent habits',
+    );
+    it.todo('');
+  });
+
+  describe('getCategories by userId: ', () => {
+    it.todo('should return categories');
+    it.todo('should empty array when user doesnt has any categories');
+  });
 });

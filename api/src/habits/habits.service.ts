@@ -9,7 +9,8 @@ import { Habit, HabitLog } from '@prisma/client';
 
 @Injectable()
 export class HabitsService {
-  constructor(private readonly prisma: PrismaService) {}
+
+  constructor(private readonly prisma: PrismaService) { }
 
   async createHabit(createHabitDto: CreateHabitDto): Promise<Habit> {
     const { title, description, frequency, userId, categoryId } =
@@ -43,7 +44,7 @@ export class HabitsService {
     });
   }
 
-  async getHabits(): Promise<Habit[]> {
+  async getHabitsbyUserId(userId: string): Promise<Habit[]> {
     return this.prisma.habit.findMany();
   }
 
@@ -61,6 +62,10 @@ export class HabitsService {
         loggedAt,
       },
     });
+  }
+
+  unlogHabit(logId: string) {
+    throw new Error('Method not implemented.');
   }
 
   async getHabitLogs(habitId: string): Promise<HabitLog[]> {

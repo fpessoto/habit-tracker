@@ -1,5 +1,3 @@
-// CategoryService.ts
-
 import { Injectable } from '@nestjs/common';
 import { Category } from '@prisma/client';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -12,13 +10,13 @@ export class CategoryService {
 
   async createCategory(
     createCategoryDto: CreateCategoryDto,
-    userId
+    userId: string,
   ): Promise<Category> {
     const { name } = createCategoryDto;
     return this.prisma.category.create({
       data: {
         name,
-        userId
+        userId,
       },
     });
   }
