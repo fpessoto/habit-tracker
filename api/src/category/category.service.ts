@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Category } from '@prisma/client';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/infrastructure/config/prisma/prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
@@ -13,12 +13,14 @@ export class CategoryService {
     userId: string,
   ): Promise<Category> {
     const { name } = createCategoryDto;
-    return this.prisma.category.create({
+    const createdCategory = this.prisma.category.create({
       data: {
         name,
         userId,
       },
     });
+
+    return createdCategory;
   }
 
   async updateCategory(
