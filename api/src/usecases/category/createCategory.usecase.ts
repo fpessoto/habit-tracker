@@ -4,11 +4,15 @@ import { CategoryRepository } from 'src/domain/repositories/categoryRepository.i
 import { AddCategoryDto } from 'src/infrastructure/controllers/category/category.dto';
 
 export class createCategoryUseCase {
-  constructor(private readonly logger: ILogger, private readonly categoryRepository: CategoryRepository) { }
+  constructor(
+    private readonly logger: ILogger,
+    private readonly categoryRepository: CategoryRepository,
+  ) { }
 
-  async execute(createCategoryDto: AddCategoryDto,
-    userId: string,):
-    Promise<CategoryModel> {
+  async execute(
+    createCategoryDto: AddCategoryDto,
+    userId: string,
+  ): Promise<CategoryModel> {
     const category = new CategoryModel();
 
     category.name = createCategoryDto.name;
@@ -16,7 +20,10 @@ export class createCategoryUseCase {
 
     const result = await this.categoryRepository.insert(category);
 
-    this.logger.log('createCategoryUseCase execute', 'New category have been inserted');
+    this.logger.log(
+      'createCategoryUseCase execute',
+      'New category have been inserted',
+    );
     return result;
   }
 }
