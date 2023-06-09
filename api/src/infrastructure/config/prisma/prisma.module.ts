@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaModule } from 'nestjs-prisma';
 import { EnvironmentConfigService } from '../environment-config/environment-config.service';
+import { EnvironmentConfigModule } from '../environment-config/environment-config.module';
 
 @Module({
   imports: [
+    EnvironmentConfigModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -21,6 +23,7 @@ import { EnvironmentConfigService } from '../environment-config/environment-conf
           },
         };
       },
+      imports: [EnvironmentConfigModule],
       inject: [EnvironmentConfigService],
     }),
   ],

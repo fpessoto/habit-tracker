@@ -1,11 +1,19 @@
-import { CategoryModel } from 'src/domain/model/category';
-import { ILogger } from '../../domain/logger/logger.interface';
-import { CategoryRepository } from 'src/domain/repositories/categoryRepository.interface';
-import { AddCategoryDto } from 'src/infrastructure/controllers/category/category.dto';
+import { CategoryModel } from '../../domain/model/category';
+import {
+  ILOGGER_TOKEN_PROVIDER,
+  ILogger,
+} from '../../domain/logger/logger.interface';
+import {
+  CATEGORY_REPOSITORY_TOKEN_PROVIDER,
+  CategoryRepository,
+} from '../../domain/repositories/categoryRepository.interface';
+import { AddCategoryDto } from '../../infrastructure/controllers/category/category.dto';
+import { Inject } from '@nestjs/common';
 
-export class createCategoryUseCase {
+export class CreateCategoryUseCase {
   constructor(
-    private readonly logger: ILogger,
+    @Inject(ILOGGER_TOKEN_PROVIDER) private readonly logger: ILogger,
+    @Inject(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
     private readonly categoryRepository: CategoryRepository,
   ) { }
 

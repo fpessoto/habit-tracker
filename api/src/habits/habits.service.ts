@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreateHabitDto } from './dto/create-habit.dto';
 import { UpdateHabitDto } from './dto/update-habit.dto';
 import { LogHabitDto } from './dto/log-habit.dto';
-import { PrismaService } from 'src/infrastructure/config/prisma/prisma/prisma.service';
 import { Habit, HabitLog } from '@prisma/client';
+import { PrismaService } from 'src/infrastructure/config/prisma/prisma.service';
 
 @Injectable()
 export class HabitsService {
-
   constructor(private readonly prisma: PrismaService) { }
 
   async createHabit(createHabitDto: CreateHabitDto): Promise<Habit> {

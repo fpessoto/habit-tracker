@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 
 
 import { ExceptionsModule } from '../exceptions/exceptions.module';
@@ -9,32 +9,45 @@ import { RepositoriesModule } from '../repositories/repositories.module';
 
 import { EnvironmentConfigModule } from '../config/environment-config/environment-config.module';
 import { UseCaseProxy } from './usecases-proxy';
-import { createCategoryUseCase } from 'src/usecases/category/createCategory.usecase';
-import { CategoryRepository } from 'src/domain/repositories/categoryRepository.interface';
+import { CreateCategoryUseCase } from 'src/usecases/category/createCategory.usecase';
+import {
+  CATEGORY_REPOSITORY_TOKEN_PROVIDER,
+  CategoryRepository,
+} from 'src/domain/repositories/categoryRepository.interface';
 import { PrismaCategoryRepository } from '../repositories/category.repository';
+import { ILOGGER_TOKEN_PROVIDER } from '../../domain/logger/logger.interface';
 
+const loggerProvider = {
+  provide: ILOGGER_TOKEN_PROVIDER,
+  useValue: LoggerService,
+};
+
+const categoryRepositoryProvider = {
+  provide: CATEGORY_REPOSITORY_TOKEN_PROVIDER,
+  useValue: PrismaCategoryRepository,
+};
+
+export const CREATE_CATEGORY_USECASES_PROXY = 'createCategoryUseCasesProxy';
+const CREATE_CATEGORY_USECASES_PROVIDER: Provider = {
+  inject: [loggerProvider.provide, categoryRepositoryProvider.provide],
+  provide: CREATE_CATEGORY_USECASES_PROXY,
+  useFactory: (logger: LoggerService, categoryRepo: CategoryRepository) =>
+    new UseCaseProxy(new CreateCategoryUseCase(logger, categoryRepo)),
+};
 @Module({
-  imports: [LoggerModule, EnvironmentConfigModule, RepositoriesModule, ExceptionsModule],
+  imports: [
+    LoggerModule,
+    EnvironmentConfigModule,
+    RepositoriesModule,
+    ExceptionsModule,
+  ],
 })
 export class UsecasesProxyModule {
-
-
-  static CREATE_CATEGORY_USECASES_PROXY = 'createCategoryUseCasesProxy';
-
-
   static register(): DynamicModule {
     return {
       module: UsecasesProxyModule,
-      providers: [
-        {
-          inject: [LoggerService, PrismaCategoryRepository],
-          provide: UsecasesProxyModule.CREATE_CATEGORY_USECASES_PROXY,
-          useFactory: (logger: LoggerService, categoryRepo: CategoryRepository) => new UseCaseProxy(new createCategoryUseCase(logger, categoryRepo)),
-        },
-      ],
-      exports: [
-        UsecasesProxyModule.CREATE_CATEGORY_USECASES_PROXY,
-      ],
+      providers: [CREATE_CATEGORY_USECASES_PROVIDER],
+      exports: [CREATE_CATEGORY_USECASES_PROXY],
     };
   }
 }

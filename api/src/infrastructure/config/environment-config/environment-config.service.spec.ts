@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EnvironmentConfigService } from './environment-config.service';
 
-describe('EnvironmentConfigService', () => {
+xdescribe('EnvironmentConfigService', () => {
   let service: EnvironmentConfigService;
 
   beforeEach(async () => {

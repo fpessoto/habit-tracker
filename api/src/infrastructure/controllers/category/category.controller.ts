@@ -2,7 +2,7 @@ import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiTags, ApiResponse, ApiExtraModels } from '@nestjs/swagger';
 import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecases-proxy.module';
-import { createCategoryUseCase } from 'src/usecases/category/createCategory.usecase';
+import { CreateCategoryUseCase } from 'src/usecases/category/createCategory.usecase';
 import { AddCategoryDto } from './category.dto';
 import { CategoryPresenter } from './category.presenter';
 import { User } from 'src/auth/decorators/user.decorator';
@@ -14,7 +14,7 @@ import { User } from 'src/auth/decorators/user.decorator';
 export class CategoryController {
   constructor(
     @Inject(UsecasesProxyModule.CREATE_CATEGORY_USECASES_PROXY)
-    private readonly createCategoryUsecaseProxy: UseCaseProxy<createCategoryUseCase>,
+    private readonly createCategoryUsecaseProxy: UseCaseProxy<CreateCategoryUseCase>,
   ) { }
 
   @Post('category')
