@@ -31,7 +31,7 @@ import { PrismaService } from 'src/infrastructure/config/prisma/prisma.service';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    }
+    },
   ],
 })
-export class AuthModule { }
+export class AuthModule {}

@@ -7,7 +7,7 @@ import { PrismaService } from 'src/infrastructure/config/prisma/prisma.service';
 
 @Injectable()
 export class HabitsService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createHabit(createHabitDto: CreateHabitDto): Promise<Habit> {
     const { title, description, frequency, userId, categoryId } =

@@ -14,4 +14,4 @@ import { ControllersModule } from './infrastructure/controllers/controllers.modu
     EnvironmentConfigModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

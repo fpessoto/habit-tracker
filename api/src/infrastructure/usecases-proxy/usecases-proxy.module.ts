@@ -1,6 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 
-
 import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { LoggerModule } from '../logger/logger.module';
 import { LoggerService } from '../logger/logger.service';

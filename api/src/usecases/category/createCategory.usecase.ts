@@ -15,7 +15,7 @@ export class CreateCategoryUseCase {
     @Inject(ILOGGER_TOKEN_PROVIDER) private readonly logger: ILogger,
     @Inject(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
     private readonly categoryRepository: CategoryRepository,
-  ) { }
+  ) {}
 
   async execute(
     createCategoryDto: AddCategoryDto,

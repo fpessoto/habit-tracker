@@ -4,7 +4,7 @@ import { DatabaseConfig } from 'src/domain/config/database.interface';
 
 @Injectable()
 export class EnvironmentConfigService implements DatabaseConfig {
-  constructor(private configService: ConfigService) { }
+  constructor(private configService: ConfigService) {}
 
   getDatabaseURL(): string {
     return this.configService.get<string>('DATABASE_URL');

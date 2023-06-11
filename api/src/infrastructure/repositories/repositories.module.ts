@@ -7,4 +7,4 @@ import { PrismaCategoryRepository } from './category.repository';
   providers: [PrismaCategoryRepository],
   exports: [PrismaCategoryRepository],
 })
-export class RepositoriesModule { }
+export class RepositoriesModule {}

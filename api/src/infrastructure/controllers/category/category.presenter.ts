@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { CategoryModel } from "src/domain/model/category";
+import { ApiProperty } from '@nestjs/swagger';
+import { CategoryModel } from 'src/domain/model/category';
 
 export class CategoryPresenter {
   @ApiProperty()
@@ -12,4 +12,3 @@ export class CategoryPresenter {
     this.name = model.name;
   }
 }
-

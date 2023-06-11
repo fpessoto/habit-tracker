@@ -18,4 +18,4 @@ import { validate } from 'class-validator';
   providers: [EnvironmentConfigService],
   exports: [EnvironmentConfigService],
 })
-export class EnvironmentConfigModule { }
+export class EnvironmentConfigModule {}

@@ -17,7 +17,7 @@ import { User } from 'src/auth/decorators/user.decorator';
 
 @Controller('api/habits')
 export class HabitsController {
-  constructor(private readonly habitService: HabitsService) { }
+  constructor(private readonly habitService: HabitsService) {}
 
   @Post()
   async createHabit(@Body() createHabitDto: CreateHabitDto) {
@@ -61,9 +61,7 @@ export class HabitsController {
   }
 
   @Delete('/log/:log_id')
-  async unlogHabit(
-    @Param('log_id') logId: string,
-  ) {
+  async unlogHabit(@Param('log_id') logId: string) {
     return this.habitService.unlogHabit(logId);
   }
 }

@@ -18,7 +18,7 @@ import { CategoryService } from './category.service';
 @ApiBearerAuth()
 @Controller('api/categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) { }
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Put(':category_id')
   async updateCategory(

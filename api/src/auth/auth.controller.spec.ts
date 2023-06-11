@@ -25,5 +25,4 @@ describe('AuthController', () => {
     it.todo('should get the user profile');
     it.todo('should get Unauthorized when invalid token');
   });
-
 });

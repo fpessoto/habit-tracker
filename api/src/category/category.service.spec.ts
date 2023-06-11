@@ -33,7 +33,6 @@
 //         updatedAt: new Date(),
 //       }
 
-
 //       const createdCategory = await service.createCategory(createCategoryDTO, userId);
 
 //       expect(createdCategory.id).toBe(mockedCategory.id)

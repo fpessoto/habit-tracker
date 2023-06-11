@@ -15,7 +15,7 @@ export class CategoryController {
   constructor(
     @Inject(UsecasesProxyModule.CREATE_CATEGORY_USECASES_PROXY)
     private readonly createCategoryUsecaseProxy: UseCaseProxy<CreateCategoryUseCase>,
-  ) { }
+  ) {}
 
   @Post('category')
   @ApiResponse({ type: CategoryPresenter })

@@ -29,4 +29,4 @@ import { EnvironmentConfigModule } from '../environment-config/environment-confi
   ],
 })
 //todo configure prisma module
-export class PrismaConfigModule { }
+export class PrismaConfigModule {}
