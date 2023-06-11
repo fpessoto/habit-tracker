@@ -15,14 +15,21 @@ export class CreateCategoryUseCase {
     @Inject(ILOGGER_TOKEN_PROVIDER) private readonly logger: ILogger,
     @Inject(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
     private readonly categoryRepository: CategoryRepository,
-  ) {}
+  ) { }
 
   async execute(
     createCategoryDto: AddCategoryDto,
     userId: string,
   ): Promise<CategoryModel> {
-    const category = new CategoryModel();
+    const existentCategories = await this.categoryRepository.findByFilters({
+      userId,
+      categoryName: createCategoryDto.name,
+    });
 
+    if (existentCategories && existentCategories.length > 0)
+      throw new Error('This category already exists');
+
+    const category = new CategoryModel();
     category.name = createCategoryDto.name;
     category.userId = userId;
 

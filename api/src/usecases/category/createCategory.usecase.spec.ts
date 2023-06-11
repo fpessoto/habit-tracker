@@ -18,6 +18,15 @@ describe('createCategoryUseCase', () => {
   let repository: jest.Mocked<CategoryRepository>;
   let logger: jest.Mocked<ILogger>;
 
+  const VALID_USER_ID = '44c49bf3-bd75-4b04-9603-977be18a823c';
+  const CATEGORY_MODEL_MOCK: CategoryModel = {
+    id: 'db13a953-6695-41a6-a423-18107bcad336',
+    name: 'newCategoryName',
+    userId: VALID_USER_ID,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   beforeEach(async () => {
     const { unit, unitRef } = TestBed.create(CreateCategoryUseCase)
       .mock(ILOGGER_TOKEN_PROVIDER)
@@ -40,31 +49,39 @@ describe('createCategoryUseCase', () => {
 
   describe('execute: ', () => {
     it('should create with success', async () => {
-      const userId = '44c49bf3-bd75-4b04-9603-977be18a823c';
+
       const createCategoryDTO: AddCategoryDto = {
         name: 'newCategoryName',
-      };
-      const mockedCategory: CategoryModel = {
-        id: 'db13a953-6695-41a6-a423-18107bcad336',
-        name: 'newCategoryName',
-        userId: userId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       };
 
       jest
         .spyOn(repository, 'insert')
-        .mockImplementation(async () => mockedCategory);
+        .mockImplementation(async () => CATEGORY_MODEL_MOCK);
 
       const createdCategory = await underTest.execute(
         createCategoryDTO,
-        userId,
+        VALID_USER_ID,
       );
 
-      expect(createdCategory.id).toBe(mockedCategory.id);
+      expect(createdCategory.id).toBe(CATEGORY_MODEL_MOCK.id);
     });
-    it.todo(
-      'should return businessException when category name already exists',
-    );
+    it('should return businessException when category name already exists', async () => {
+      const createCategoryDTO: AddCategoryDto = {
+        name: 'newCategoryName',
+      };
+
+      repository.findByFilters.mockResolvedValue([CATEGORY_MODEL_MOCK]);
+
+      // Act
+      try {
+        await underTest.execute(createCategoryDTO, VALID_USER_ID);
+        fail('Expected an error to be thrown');
+      } catch (error) {
+        // Assert
+        expect(error.message).toEqual('This category already exists');
+        expect(repository.insert).not.toHaveBeenCalled();
+        expect(logger.log).not.toHaveBeenCalled();
+      }
+    });
   });
 });
