@@ -6,7 +6,8 @@ export interface CategoryRepository {
   findAll(): Promise<CategoryModel[]>;
   findById(id: string): Promise<CategoryModel>;
   deleteById(id: string): Promise<void>;
-  findByFilters({ userId, categoryName }): Promise<CategoryModel[]>;
+  findByCategoryName({ userId, categoryName }): Promise<CategoryModel[]>;
+  findByUserId(userId: string): Promise<CategoryModel[]>;
 }
 
 export const CATEGORY_REPOSITORY_TOKEN_PROVIDER = 'CATEGORY_REPOSITORY_TOKEN';

@@ -51,7 +51,7 @@ describe('UpdateCategoryUseCase', () => {
       expect(logger.log).toHaveBeenCalled();
     });
     it('should return businessException when category name already exists', async () => {
-      repository.findByFilters.mockResolvedValue([CATEGORY_MODEL_MOCK]);
+      repository.findByCategoryName.mockResolvedValue([CATEGORY_MODEL_MOCK]);
 
       // Act
       try {

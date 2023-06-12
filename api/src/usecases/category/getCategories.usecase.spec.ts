@@ -8,6 +8,7 @@ import {
   ILOGGER_TOKEN_PROVIDER,
   ILogger,
 } from '../../domain/logger/logger.interface';
+import { GetCategoriesUseCase } from './getCategories.usecase';
 
 describe('GetCategoriesUseCase', () => {
   let underTest: GetCategoriesUseCase;
@@ -43,9 +44,20 @@ describe('GetCategoriesUseCase', () => {
     expect(underTest).toBeDefined();
   });
 
-
   describe('execute', () => {
-    it.todo('should return categories');
-    it.todo('should empty array when user doesnt has any categories');
+    it('should return categories', async () => {
+      repository.findByUserId.mockResolvedValue([CATEGORY_MODEL_MOCK]);
+
+      const categoriesResponse = await underTest.execute(VALID_USER_ID);
+
+      expect(categoriesResponse).toHaveLength(1);
+    });
+    it('should empty array when user doesnt has any categories', async () => {
+      repository.findByUserId.mockResolvedValue([]);
+
+      const categoriesResponse = await underTest.execute(VALID_USER_ID);
+
+      expect(categoriesResponse).toHaveLength(0);
+    });
   });
 });

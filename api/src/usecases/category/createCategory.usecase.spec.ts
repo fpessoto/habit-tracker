@@ -57,7 +57,7 @@ describe('createCategoryUseCase', () => {
       //assert passed values to repository
     });
     it('should return businessException when category name already exists', async () => {
-      repository.findByFilters.mockResolvedValue([CATEGORY_MODEL_MOCK]);
+      repository.findByCategoryName.mockResolvedValue([CATEGORY_MODEL_MOCK]);
 
       // Act
       try {

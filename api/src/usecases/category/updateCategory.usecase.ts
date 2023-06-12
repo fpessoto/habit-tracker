@@ -20,10 +20,12 @@ export class UpdateCategoryUseCase {
     categoryName: string,
     userId: string,
   ): Promise<void> {
-    const existentCategories = await this.categoryRepository.findByFilters({
-      userId,
-      categoryName,
-    });
+    const existentCategories = await this.categoryRepository.findByCategoryName(
+      {
+        userId,
+        categoryName,
+      },
+    );
 
     this.categoryRepository;
 

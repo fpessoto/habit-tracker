@@ -17,10 +17,12 @@ export class CreateCategoryUseCase {
   ) {}
 
   async execute(categoryName: string, userId: string): Promise<CategoryModel> {
-    const existentCategories = await this.categoryRepository.findByFilters({
-      userId,
-      categoryName,
-    });
+    const existentCategories = await this.categoryRepository.findByCategoryName(
+      {
+        userId,
+        categoryName,
+      },
+    );
 
     if (existentCategories && existentCategories.length > 0)
       throw new Error('This category already exists');
