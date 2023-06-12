@@ -55,7 +55,6 @@
 //     it.todo(
 //       'should return businessException when category has existent habits',
 //     );
-//     it.todo('');
 //   });
 
 //   describe('getCategories by userId: ', () => {

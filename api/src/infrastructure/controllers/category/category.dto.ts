@@ -7,3 +7,10 @@ export class AddCategoryDto {
   @IsString()
   readonly name: string;
 }
+
+export class UpdateCategoryDto {
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
+}

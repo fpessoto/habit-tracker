@@ -1,4 +1,4 @@
-import { CategoryModel } from '../../domain/model/category';
+import { Inject } from '@nestjs/common';
 import {
   ILOGGER_TOKEN_PROVIDER,
   ILogger,
@@ -7,35 +7,32 @@ import {
   CATEGORY_REPOSITORY_TOKEN_PROVIDER,
   CategoryRepository,
 } from '../../domain/repositories/categoryRepository.interface';
-import { AddCategoryDto } from '../../infrastructure/controllers/category/category.dto';
-import { Inject } from '@nestjs/common';
 
-export class CreateCategoryUseCase {
+export class UpdateCategoryUseCase {
   constructor(
     @Inject(ILOGGER_TOKEN_PROVIDER) private readonly logger: ILogger,
     @Inject(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
     private readonly categoryRepository: CategoryRepository,
   ) { }
 
-  async execute(categoryName: string, userId: string): Promise<CategoryModel> {
+  async execute(
+    categoryId: string,
+    categoryName: string,
+    userId: string,
+  ): Promise<void> {
     const existentCategories = await this.categoryRepository.findByFilters({
       userId,
-      categoryName: categoryName,
+      categoryName,
     });
 
     if (existentCategories && existentCategories.length > 0)
       throw new Error('This category already exists');
 
-    const category = new CategoryModel();
-    category.name = categoryName;
-    category.userId = userId;
-
-    const result = await this.categoryRepository.insert(category);
+    await this.categoryRepository.updateName(categoryId, categoryName);
 
     this.logger.log(
-      'createCategoryUseCase execute',
-      'New category have been inserted',
+      'UpdateCategoryUseCase execute',
+      'category have been updated',
     );
-    return result;
   }
 }

@@ -6,7 +6,7 @@ import { CategoryRepository } from '../../domain/repositories/categoryRepository
 
 @Injectable()
 export class PrismaCategoryRepository implements CategoryRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async insert(category: CategoryModel): Promise<CategoryModel> {
     const { name, userId } = category;
@@ -22,6 +22,20 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
     return createdModel;
   }
+
+  updateName(id: string, name: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  findByFilters({
+    userId,
+    categoryName,
+  }: {
+    userId: any;
+    categoryName: any;
+  }): Promise<CategoryModel[]> {
+    throw new Error('Method not implemented.');
+  }
+
   findAll(): Promise<CategoryModel[]> {
     throw new Error('Method not implemented.');
   }
