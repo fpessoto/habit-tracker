@@ -9,7 +9,7 @@ export class HabitModel {
   categoryId: string;
 }
 
-enum Frequency {
+export enum Frequency {
   DAILY,
   WEEKLY,
   MONTHLY,

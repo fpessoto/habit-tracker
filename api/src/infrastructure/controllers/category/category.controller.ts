@@ -1,11 +1,11 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiTags, ApiResponse, ApiExtraModels } from '@nestjs/swagger';
-import { UseCaseProxy } from 'src/infrastructure/usecases-proxy/usecases-proxy';
-import { UsecasesProxyModule } from 'src/infrastructure/usecases-proxy/usecases-proxy.module';
-import { CreateCategoryUseCase } from 'src/usecases/category/createCategory.usecase';
 import { AddCategoryDto } from './category.dto';
 import { CategoryPresenter } from './category.presenter';
-import { User } from 'src/auth/decorators/user.decorator';
+import { User } from '../../../auth/decorators/user.decorator';
+import { CREATE_CATEGORY_USECASES_PROXY } from '../../usecases-proxy/usecases-proxy.module';
+import { CreateCategoryUseCase } from '../../../usecases/category/createCategory.usecase';
+import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 
 @Controller('category')
 @ApiTags('category')
@@ -13,7 +13,7 @@ import { User } from 'src/auth/decorators/user.decorator';
 @ApiExtraModels(CategoryPresenter)
 export class CategoryController {
   constructor(
-    @Inject(UsecasesProxyModule.CREATE_CATEGORY_USECASES_PROXY)
+    @Inject(CREATE_CATEGORY_USECASES_PROXY)
     private readonly createCategoryUsecaseProxy: UseCaseProxy<CreateCategoryUseCase>,
   ) {}
 
@@ -22,7 +22,7 @@ export class CategoryController {
   async addCategory(@Body() addCategoryDto: AddCategoryDto, @User() user) {
     const categoryCreated = await this.createCategoryUsecaseProxy
       .getInstance()
-      .execute(addCategoryDto, user.id);
+      .execute(addCategoryDto.name, user.id);
     return new CategoryPresenter(categoryCreated);
   }
 }

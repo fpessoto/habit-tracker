@@ -1,6 +1,5 @@
-import { Frequency } from '../../habits/enums/frequency.enum';
 import { CategoryModel } from '../model/category';
-import { HabitModel } from '../model/habit';
+import { Frequency, HabitModel } from '../model/habit';
 
 export const VALID_USER_ID = '44c49bf3-bd75-4b04-9603-977be18a823c';
 

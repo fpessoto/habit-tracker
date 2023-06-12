@@ -8,13 +8,14 @@ import { RepositoriesModule } from '../repositories/repositories.module';
 
 import { EnvironmentConfigModule } from '../config/environment-config/environment-config.module';
 import { UseCaseProxy } from './usecases-proxy';
-import { CreateCategoryUseCase } from 'src/usecases/category/createCategory.usecase';
+
+import { PrismaCategoryRepository } from '../repositories/category.repository';
+import { ILOGGER_TOKEN_PROVIDER } from '../../domain/logger/logger.interface';
 import {
   CATEGORY_REPOSITORY_TOKEN_PROVIDER,
   CategoryRepository,
-} from 'src/domain/repositories/categoryRepository.interface';
-import { PrismaCategoryRepository } from '../repositories/category.repository';
-import { ILOGGER_TOKEN_PROVIDER } from '../../domain/logger/logger.interface';
+} from '../../domain/repositories/categoryRepository.interface';
+import { CreateCategoryUseCase } from '../../usecases/category/createCategory.usecase';
 
 const loggerProvider = {
   provide: ILOGGER_TOKEN_PROVIDER,

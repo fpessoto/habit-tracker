@@ -26,6 +26,11 @@ export class PrismaCategoryRepository implements CategoryRepository {
   updateName(id: string, name: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+  findByUserId(userId: string): Promise<CategoryModel[]> {
+    throw new Error('Method not implemented.');
+  }
+
   findByCategoryName({
     userId,
     categoryName,
