@@ -1,38 +1,27 @@
 import { TestBed } from '@automock/jest';
 import { CreateCategoryUseCase as CreateCategoryUseCase } from './createCategory.usecase';
-import { CategoryModel } from '../../domain/model/category';
-import { LoggerService } from '../../infrastructure/logger/logger.service';
-import { PrismaCategoryRepository } from '../../infrastructure/repositories/category.repository';
 import {
   CATEGORY_REPOSITORY_TOKEN_PROVIDER,
   CategoryRepository,
 } from '../../domain/repositories/categoryRepository.interface';
-import { AddCategoryDto } from '../../infrastructure/controllers/category/category.dto';
 import {
   ILOGGER_TOKEN_PROVIDER,
   ILogger,
 } from '../../domain/logger/logger.interface';
+import { CATEGORY_MODEL_MOCK, VALID_USER_ID } from '../../domain/mocks/data';
+import { CategoryModel } from '../../domain/model/category';
 
 describe('createCategoryUseCase', () => {
   let underTest: CreateCategoryUseCase;
   let repository: jest.Mocked<CategoryRepository>;
   let logger: jest.Mocked<ILogger>;
 
-  const VALID_USER_ID = '44c49bf3-bd75-4b04-9603-977be18a823c';
-  const CATEGORY_MODEL_MOCK: CategoryModel = {
-    id: 'db13a953-6695-41a6-a423-18107bcad336',
-    name: 'newCategoryName',
-    userId: VALID_USER_ID,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
   beforeEach(async () => {
     const { unit, unitRef } = TestBed.create(CreateCategoryUseCase)
-      .mock(ILOGGER_TOKEN_PROVIDER)
+      .mock<ILogger>(ILOGGER_TOKEN_PROVIDER)
       .using({ log: jest.fn() })
 
-      .mock(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
+      .mock<CategoryRepository>(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
       .using({ insert: jest.fn() })
 
       .compile();
@@ -51,7 +40,10 @@ describe('createCategoryUseCase', () => {
     it('should create with success', async () => {
       jest
         .spyOn(repository, 'insert')
-        .mockImplementation(async () => CATEGORY_MODEL_MOCK);
+        .mockImplementation((category: CategoryModel) => {
+          category.id = CATEGORY_MODEL_MOCK.id;
+          return Promise.resolve(category);
+        });
 
       const createdCategory = await underTest.execute(
         'newCategoryName',
@@ -60,6 +52,9 @@ describe('createCategoryUseCase', () => {
 
       expect(createdCategory.id).toBe(CATEGORY_MODEL_MOCK.id);
       expect(createdCategory.name).toBe(CATEGORY_MODEL_MOCK.name);
+      expect(createdCategory.userId).toBe(CATEGORY_MODEL_MOCK.userId);
+
+      //assert passed values to repository
     });
     it('should return businessException when category name already exists', async () => {
       repository.findByFilters.mockResolvedValue([CATEGORY_MODEL_MOCK]);

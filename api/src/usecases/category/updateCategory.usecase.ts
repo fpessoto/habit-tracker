@@ -13,7 +13,7 @@ export class UpdateCategoryUseCase {
     @Inject(ILOGGER_TOKEN_PROVIDER) private readonly logger: ILogger,
     @Inject(CATEGORY_REPOSITORY_TOKEN_PROVIDER)
     private readonly categoryRepository: CategoryRepository,
-  ) { }
+  ) {}
 
   async execute(
     categoryId: string,
@@ -24,6 +24,8 @@ export class UpdateCategoryUseCase {
       userId,
       categoryName,
     });
+
+    this.categoryRepository;
 
     if (existentCategories && existentCategories.length > 0)
       throw new Error('This category already exists');
