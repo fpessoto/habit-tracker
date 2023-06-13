@@ -12,7 +12,7 @@ import {
   HABIT_REPOSITORY_TOKEN_PROVIDER,
   HabitRepository,
 } from '../../domain/repositories/habitRepository.interface';
-import { CATEGORY_MODEL_MOCK, HABITS_MOCK } from '../../domain/mocks/data';
+import { CATEGORY_MODEL_MOCK, HABITS_LIST_MOCK } from '../../domain/mocks/data';
 
 describe('DeleteCategoryUseCase', () => {
   let underTest: DeleteCategoryUseCase;
@@ -56,7 +56,7 @@ describe('DeleteCategoryUseCase', () => {
     it('should return businessException when category has existent habits', async () => {
       // Act
       try {
-        habitRepository.findByCategoryId.mockResolvedValue(HABITS_MOCK);
+        habitRepository.findByCategoryId.mockResolvedValue(HABITS_LIST_MOCK);
 
         await underTest.execute(CATEGORY_MODEL_MOCK.id);
         fail('Expected an error to be thrown');

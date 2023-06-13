@@ -7,7 +7,7 @@ import {
   HABIT_REPOSITORY_TOKEN_PROVIDER,
   HabitRepository,
 } from '../../domain/repositories/habitRepository.interface';
-import { HabitModel } from '../../domain/model/habit';
+import { Frequency, HabitModel } from '../../domain/model/habit';
 
 export class CreateHabitUseCase {
   constructor(
@@ -16,11 +16,33 @@ export class CreateHabitUseCase {
     private readonly habitRepository: HabitRepository,
   ) {}
 
-  async execute(categoryName: string, userId: string): Promise<HabitModel> {
+  async execute(
+    title: string,
+    description: string,
+    userId: string,
+    frequency: Frequency,
+    categoryId: string,
+  ): Promise<HabitModel> {
+    const newHabit = new HabitModel(
+      undefined,
+      title,
+      description,
+      userId,
+      frequency,
+      categoryId,
+    );
+
+    const existentHabits = await this.habitRepository.findByUser(userId);
+
+    if (existentHabits && existentHabits?.filter((h) => h.title == title))
+      throw new Error('There is an existent habit with this title');
+
+    const created = await this.habitRepository.insert(newHabit);
+
     this.logger.log(
       'CreateHabitUseCase execute',
       'New habit have been inserted',
     );
-    return;
+    return created;
   }
 }
