@@ -18,16 +18,12 @@ async function main() {
   });
 
   const category1 = await prisma.category.create({
-    data:
-      { name: 'Health', userId: user1.id },
+    data: { name: 'Health', userId: user1.id },
   });
 
   const category2 = await prisma.category.create({
-    data:
-      { name: 'Fitness', userId: user1.id },
-
+    data: { name: 'Fitness', userId: user1.id },
   });
-
 
   const habit1 = await prisma.habit.create({
     data: {

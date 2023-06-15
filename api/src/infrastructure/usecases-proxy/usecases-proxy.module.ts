@@ -19,41 +19,87 @@ import { CreateCategoryUseCase } from '../../usecases/category/createCategory.us
 import { LoginUseCase } from '../../usecases/auth/login.usecase';
 import { LogoutUseCase } from '../../usecases/auth/logout.usecase';
 import { IsAuthenticatedUseCase } from '../../usecases/auth/isAuthenticated.usecase';
+import {
+  USER_REPOSITORY_TOKEN_PROVIDER,
+  UserRepository,
+} from '../../domain/repositories/user.repository';
+import { PrismaUserRepository } from '../repositories/user.repository';
+import { JwtTokenService } from '../services/jwt/jwt.service';
+import {
+  JWTConfig,
+  JWT_CONFIG_TOKEN,
+} from '../../domain/config/jwt-config.interface';
+import { EnvironmentConfigService } from '../config/environment-config/environment-config.service';
+import {
+  IJwtService,
+  JWT_SERVICE_TOKEN_PROVIDER,
+} from '../../domain/adapters/jwt-service.interface';
+import { BcryptModule } from '../services/bcrypt/bcrypt.module';
+import { JwtModule } from '../services/jwt/jwt.module';
 
-const loggerProvider = {
+//DEPENDECIES
+export const LOGGER_SERVICE_PROVIDER = {
   provide: ILOGGER_TOKEN_PROVIDER,
   useValue: LoggerService,
 };
 
-const categoryRepositoryProvider = {
+export const CATEGORY_REPOSITORY_PROVIDER = {
   provide: CATEGORY_REPOSITORY_TOKEN_PROVIDER,
   useValue: PrismaCategoryRepository,
 };
 
+//USE CASE PROVIDERS
 export const CREATE_CATEGORY_USECASES_PROXY = 'createCategoryUseCasesProxy';
 const CREATE_CATEGORY_USECASES_PROVIDER: Provider = {
-  inject: [loggerProvider.useValue, categoryRepositoryProvider.useValue],
+  inject: [
+    LOGGER_SERVICE_PROVIDER.useValue,
+    CATEGORY_REPOSITORY_PROVIDER.useValue,
+  ],
   provide: CREATE_CATEGORY_USECASES_PROXY,
   useFactory: (logger: LoggerService, categoryRepo: CategoryRepository) =>
     new UseCaseProxy(new CreateCategoryUseCase(logger, categoryRepo)),
 };
 
-export const LOGIN_USECASES_PROXY = 'createCategoryUseCasesProxy';
-const LOGIN_USECASES_PROVIDER: Provider = {
-  inject: [],
-  provide: LOGIN_USECASES_PROXY,
-  useFactory: () => new UseCaseProxy(new LoginUseCase()),
+export const JWT_SERVICE_PROVIDER = {
+  provide: JWT_SERVICE_TOKEN_PROVIDER,
+  useValue: JwtTokenService,
 };
 
-export const LOGOUT_USECASES_PROXY = 'createCategoryUseCasesProxy';
-const LOGOUT_USECASES_PROVIDER: Provider = {
+export const JWT_CONFIG_PROVIDER = {
+  provide: JWT_CONFIG_TOKEN,
+  useValue: EnvironmentConfigService,
+};
+
+export const USER_REPOSITORY_PROVIDER = {
+  provide: USER_REPOSITORY_TOKEN_PROVIDER,
+  useValue: PrismaUserRepository,
+};
+
+export const LOGIN_USECASES_PROXY = 'loginUseCaseProxy';
+export const LOGIN_USECASES_PROVIDER: Provider = {
+  inject: [
+    JWT_SERVICE_PROVIDER.useValue,
+    JWT_CONFIG_PROVIDER.useValue,
+    USER_REPOSITORY_PROVIDER.useValue,
+  ],
+  provide: LOGIN_USECASES_PROXY,
+  useFactory: (
+    jwtService: IJwtService,
+    jwtConfig: JWTConfig,
+    userRepository: UserRepository,
+  ): UseCaseProxy<LoginUseCase> =>
+    new UseCaseProxy(new LoginUseCase(jwtService, jwtConfig, userRepository)),
+};
+
+export const LOGOUT_USECASES_PROXY = 'logoutUseCaseProxy';
+export const LOGOUT_USECASES_PROVIDER: Provider = {
   inject: [],
   provide: LOGOUT_USECASES_PROXY,
   useFactory: () => new UseCaseProxy(new LogoutUseCase()),
 };
 
 export const IS_AUTHENTICATED_USECASES_PROXY = 'createCategoryUseCasesProxy';
-const IS_AUTHENTICATED_USECASES_PROVIDER: Provider = {
+export const IS_AUTHENTICATED_USECASES_PROVIDER: Provider = {
   inject: [],
   provide: IS_AUTHENTICATED_USECASES_PROXY,
   useFactory: () => new UseCaseProxy(new IsAuthenticatedUseCase()),
@@ -64,6 +110,8 @@ const IS_AUTHENTICATED_USECASES_PROVIDER: Provider = {
     LoggerModule,
     EnvironmentConfigModule,
     RepositoriesModule,
+    JwtModule,
+    BcryptModule,
     ExceptionsModule,
   ],
 })

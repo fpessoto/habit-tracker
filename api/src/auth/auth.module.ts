@@ -11,6 +11,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { UserService } from '../user/user.service';
 import { PrismaService } from 'nestjs-prisma';
+import { JwtTokenService } from '../infrastructure/services/jwt/jwt.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PrismaService } from 'nestjs-prisma';
   providers: [
     AuthService,
     UserService,
+    JwtTokenService,
     LocalStrategy,
     JwtStrategy,
     PrismaService,
