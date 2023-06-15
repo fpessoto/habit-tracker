@@ -1,6 +1,11 @@
 import { UserModel } from '../model/user.model';
 
 export interface UserRepository {
+  updateRefreshToken(
+    username: string,
+    currentHashedRefreshToken: string,
+  ): Promise<void>;
+  updateLastLogin(username: string): Promise<void>;
   findOneByUserName(username: string): Promise<UserModel>;
 }
 

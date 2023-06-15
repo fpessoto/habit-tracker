@@ -16,6 +16,16 @@ export class PrismaUserRepository implements UserRepository {
     return this.toModel(user);
   }
 
+  updateRefreshToken(
+    username: string,
+    currentHashedRefreshToken: string,
+  ): Promise<void> {
+    return;
+  }
+  updateLastLogin(username: string): Promise<void> {
+    return;
+  }
+
   private toEntity(model: UserModel): User {
     const entity: User = {
       id: model.id,

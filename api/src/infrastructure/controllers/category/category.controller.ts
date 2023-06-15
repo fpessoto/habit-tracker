@@ -2,7 +2,7 @@ import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiTags, ApiResponse, ApiExtraModels } from '@nestjs/swagger';
 import { AddCategoryDto } from './category.dto';
 import { CategoryPresenter } from './category.presenter';
-import { User } from '../../../auth/decorators/user.decorator';
+import { User } from '../../common/decorators/user.decorator';
 import { CREATE_CATEGORY_USECASES_PROXY } from '../../usecases-proxy/usecases-proxy.module';
 import { CreateCategoryUseCase } from '../../../usecases/category/createCategory.usecase';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';

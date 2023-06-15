@@ -13,7 +13,7 @@ async function main() {
     data: {
       username: 'user1',
       email: 'user1@example.com',
-      password: 'password1',
+      password: '$2b$10$qi51IojUvC9KuSwt9Lym1ebk8XK.rBZ/60PuZJcNq3GqZ5G/vdEL2', //password1
     },
   });
 

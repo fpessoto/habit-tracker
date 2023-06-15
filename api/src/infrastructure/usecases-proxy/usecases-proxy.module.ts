@@ -36,6 +36,8 @@ import {
 } from '../../domain/adapters/jwt-service.interface';
 import { BcryptModule } from '../services/bcrypt/bcrypt.module';
 import { JwtModule } from '../services/jwt/jwt.module';
+import { BCRIPT_SERVICE_TOKEN_PROVIDER } from '../../domain/adapters/bcrypt.interface';
+import { BcryptService } from '../services/bcrypt/bcrypt.service';
 
 //DEPENDECIES
 export const LOGGER_SERVICE_PROVIDER = {
@@ -46,6 +48,26 @@ export const LOGGER_SERVICE_PROVIDER = {
 export const CATEGORY_REPOSITORY_PROVIDER = {
   provide: CATEGORY_REPOSITORY_TOKEN_PROVIDER,
   useValue: PrismaCategoryRepository,
+};
+
+export const JWT_SERVICE_PROVIDER = {
+  provide: JWT_SERVICE_TOKEN_PROVIDER,
+  useValue: JwtTokenService,
+};
+
+export const JWT_CONFIG_PROVIDER = {
+  provide: JWT_CONFIG_TOKEN,
+  useValue: EnvironmentConfigService,
+};
+
+export const BCRIPT_SERVICE_PROVIDER = {
+  provide: BCRIPT_SERVICE_TOKEN_PROVIDER,
+  useValue: BcryptService,
+};
+
+export const USER_REPOSITORY_PROVIDER = {
+  provide: USER_REPOSITORY_TOKEN_PROVIDER,
+  useValue: PrismaUserRepository,
 };
 
 //USE CASE PROVIDERS
@@ -60,35 +82,24 @@ const CREATE_CATEGORY_USECASES_PROVIDER: Provider = {
     new UseCaseProxy(new CreateCategoryUseCase(logger, categoryRepo)),
 };
 
-export const JWT_SERVICE_PROVIDER = {
-  provide: JWT_SERVICE_TOKEN_PROVIDER,
-  useValue: JwtTokenService,
-};
-
-export const JWT_CONFIG_PROVIDER = {
-  provide: JWT_CONFIG_TOKEN,
-  useValue: EnvironmentConfigService,
-};
-
-export const USER_REPOSITORY_PROVIDER = {
-  provide: USER_REPOSITORY_TOKEN_PROVIDER,
-  useValue: PrismaUserRepository,
-};
-
 export const LOGIN_USECASES_PROXY = 'loginUseCaseProxy';
 export const LOGIN_USECASES_PROVIDER: Provider = {
   inject: [
     JWT_SERVICE_PROVIDER.useValue,
     JWT_CONFIG_PROVIDER.useValue,
     USER_REPOSITORY_PROVIDER.useValue,
+    BCRIPT_SERVICE_PROVIDER.useValue,
   ],
   provide: LOGIN_USECASES_PROXY,
   useFactory: (
     jwtService: IJwtService,
     jwtConfig: JWTConfig,
     userRepository: UserRepository,
+    bcryptService: BcryptService,
   ): UseCaseProxy<LoginUseCase> =>
-    new UseCaseProxy(new LoginUseCase(jwtService, jwtConfig, userRepository)),
+    new UseCaseProxy(
+      new LoginUseCase(jwtService, jwtConfig, userRepository, bcryptService),
+    ),
 };
 
 export const LOGOUT_USECASES_PROXY = 'logoutUseCaseProxy';

@@ -9,3 +9,5 @@ export interface IException {
   forbiddenException(data?: IFormatExceptionMessage): void;
   UnauthorizedException(data?: IFormatExceptionMessage): void;
 }
+
+export const IEXCEPTION_TOKEN_PROVIDER = 'IEXCEPTION_TOKEN';
