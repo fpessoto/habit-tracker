@@ -16,6 +16,9 @@ import {
   CategoryRepository,
 } from '../../domain/repositories/categoryRepository.interface';
 import { CreateCategoryUseCase } from '../../usecases/category/createCategory.usecase';
+import { LoginUseCase } from '../../usecases/auth/login.usecase';
+import { LogoutUseCase } from '../../usecases/auth/logout.usecase';
+import { IsAuthenticatedUseCase } from '../../usecases/auth/isAuthenticated.usecase';
 
 const loggerProvider = {
   provide: ILOGGER_TOKEN_PROVIDER,
@@ -29,11 +32,33 @@ const categoryRepositoryProvider = {
 
 export const CREATE_CATEGORY_USECASES_PROXY = 'createCategoryUseCasesProxy';
 const CREATE_CATEGORY_USECASES_PROVIDER: Provider = {
-  inject: [loggerProvider.provide, categoryRepositoryProvider.provide],
+  inject: [loggerProvider.useValue, categoryRepositoryProvider.useValue],
   provide: CREATE_CATEGORY_USECASES_PROXY,
   useFactory: (logger: LoggerService, categoryRepo: CategoryRepository) =>
     new UseCaseProxy(new CreateCategoryUseCase(logger, categoryRepo)),
 };
+
+export const LOGIN_USECASES_PROXY = 'createCategoryUseCasesProxy';
+const LOGIN_USECASES_PROVIDER: Provider = {
+  inject: [],
+  provide: LOGIN_USECASES_PROXY,
+  useFactory: () => new UseCaseProxy(new LoginUseCase()),
+};
+
+export const LOGOUT_USECASES_PROXY = 'createCategoryUseCasesProxy';
+const LOGOUT_USECASES_PROVIDER: Provider = {
+  inject: [],
+  provide: LOGOUT_USECASES_PROXY,
+  useFactory: () => new UseCaseProxy(new LogoutUseCase()),
+};
+
+export const IS_AUTHENTICATED_USECASES_PROXY = 'createCategoryUseCasesProxy';
+const IS_AUTHENTICATED_USECASES_PROVIDER: Provider = {
+  inject: [],
+  provide: IS_AUTHENTICATED_USECASES_PROXY,
+  useFactory: () => new UseCaseProxy(new IsAuthenticatedUseCase()),
+};
+
 @Module({
   imports: [
     LoggerModule,
@@ -46,8 +71,18 @@ export class UsecasesProxyModule {
   static register(): DynamicModule {
     return {
       module: UsecasesProxyModule,
-      providers: [CREATE_CATEGORY_USECASES_PROVIDER],
-      exports: [CREATE_CATEGORY_USECASES_PROXY],
+      providers: [
+        CREATE_CATEGORY_USECASES_PROVIDER,
+        LOGIN_USECASES_PROVIDER,
+        LOGOUT_USECASES_PROVIDER,
+        IS_AUTHENTICATED_USECASES_PROVIDER,
+      ],
+      exports: [
+        CREATE_CATEGORY_USECASES_PROVIDER,
+        LOGIN_USECASES_PROVIDER,
+        LOGOUT_USECASES_PROVIDER,
+        IS_AUTHENTICATED_USECASES_PROVIDER,
+      ],
     };
   }
 }
